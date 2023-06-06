@@ -1,24 +1,24 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons';
+import { IconTypography, IconCloud, IconSignal5g, IconBriefcase } from '@tabler/icons';
 
 // constant
 const icons = {
   IconTypography,
-  IconPalette,
-  IconShadow,
-  IconWindmill
+  IconCloud,
+  IconSignal5g,
+  IconBriefcase
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
   id: 'utilities',
-  title: 'Utilities',
+  title: 'Cursos disponíveis',
   type: 'group',
   children: [
     {
       id: 'util-typography',
-      title: 'Typography',
+      title: 'IA - Inteligência Artificial',
       type: 'item',
       url: '/utils/util-typography',
       icon: icons.IconTypography,
@@ -26,25 +26,25 @@ const utilities = {
     },
     {
       id: 'util-color',
-      title: 'Color',
+      title: 'Cloud',
       type: 'item',
       url: '/utils/util-color',
-      icon: icons.IconPalette,
+      icon: icons.IconCloud,
       breadcrumbs: false
     },
     {
       id: 'util-shadow',
-      title: 'Shadow',
+      title: '5G',
       type: 'item',
       url: '/utils/util-shadow',
-      icon: icons.IconShadow,
+      icon: icons.IconSignal5g,
       breadcrumbs: false
     },
     {
       id: 'icons',
-      title: 'Icons',
+      title: 'Empreendedorismo Espacial',
       type: 'collapse',
-      icon: icons.IconWindmill,
+      icon: icons.IconBriefcase,
       children: [
         {
           id: 'tabler-icons',
