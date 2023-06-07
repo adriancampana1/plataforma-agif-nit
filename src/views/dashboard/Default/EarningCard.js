@@ -140,7 +140,7 @@ const EarningCard = ({ isLoading }) => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Grid container alignItems="center">
                   <Grid item>
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$500.00</Typography>
@@ -158,8 +158,8 @@ const EarningCard = ({ isLoading }) => {
                     </Avatar>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item sx={{ mb: 1.25 }}>
+              </Grid> */}
+              {/* <Grid item sx={{ mb: 1.25 }}>
                 <Typography
                   sx={{
                     fontSize: '1rem',
@@ -169,7 +169,7 @@ const EarningCard = ({ isLoading }) => {
                 >
                   Total Earning
                 </Typography>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
         </CardWrapper>

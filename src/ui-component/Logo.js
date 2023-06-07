@@ -1,6 +1,8 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import logo from 'assets/images/logo-ifpr.svg';
+import logoIFPR from 'assets/images/logo-ifpr.svg';
+import logoAgif from 'assets/images/logo_agif 2.svg';
+import logoNit from 'assets/images/logo-nit.svg';
 /**
  * if you want to use image instead of <svg> uncomment following.
  *
@@ -21,7 +23,10 @@ const Logo = () => {
      * <img src={logo} alt="Berry" width="100" />
      *
      */
-    <img src={logo} alt="Berry" height={50} />
+    <div>
+      <img src={logoAgif} alt="Berry" height={50} />
+      <img src={logoNit} alt="Berry" height={50} />
+    </div>
 
     /* <svg width="92" height="32" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
