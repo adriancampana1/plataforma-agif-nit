@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import passport from "passport";
-import { userService } from "../services/user.service";
+import { UserService } from "../../user/services/user.service";
 
 const router = Router();
-const userController = new UserController(new userService);
+const userController = new UserController(new UserService);
 
 router.get("/", passport.authenticate("jwt", { session: false }), userController.getAllUsers.bind(userController));
 

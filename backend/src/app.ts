@@ -1,5 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import { router as userRoutes } from "./routes/user.routes";
+import { router as userRoutes } from "./user/routes/user.routes";
 import dotenv from "dotenv";
 import fs from "fs";
 import passport from "passport";

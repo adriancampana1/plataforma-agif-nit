@@ -1,5 +1,5 @@
 import app from "./app";
-import { connectToDataBase } from "./services/database.service";
+import { connectToDataBase } from "./database/database.service";
 
 const PORT: Number = 5050;
 

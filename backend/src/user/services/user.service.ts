@@ -1,48 +1,50 @@
-import { ServiceResponse } from "../models/service/service.response";
-import User from "../models/user/user";
-import UserResponse from "../models/user/user.response";
+import { ServiceResponse } from "../../utils/types/service.response";
+import User from "../models/user";
+import UserResponse from "../models/user.response";
 import AuthenticationService from "./authentication.service";
-import { collections } from "./database.service";
+import { collections } from "../../database/database.service";
 
 class UserService {
 
-  async createUser(user: User): Promise<ServiceResponse<UserResponse>> {
+  async getAllUsers(): Promise<ServiceResponse<UserResponse[]>> {
     try {
-      await collections.users?.insertOne(user);
+      const users = await User.getAllUsers();
+      return {
+        statusCode: 200,
+        message: 'Users retrieved successfully.',
+        data: users?.map(user => UserResponse.fromUser(user))
+      };
+    } catch (error: any) {
+      console.error(error);
+      return {
+        statusCode: 500,
+        message: 'An error occurred while retrieving the users.',
+      }
+    }
+  }
+
+  async registerUser(user: User): Promise<ServiceResponse<UserResponse>> {
+    try {
+      if (await UserService.getUserByEmail(user.email)) {  
+        return {
+        statusCode: 400,
+        message: 'Email already in use.'
+        }
+      }
+    
+      user.password = await AuthenticationService.encryptPassword(user)
+      
+      await user.createUser();
+    
       return {
         statusCode: 201,
         message: 'User created successfully.',
         data: UserResponse.fromUser(user)
       }
     } catch (error: any) {
-      console.error(error); // log the error for debugging purposes
-
-      let errorMessage = 'An error occurred while creating the user.';
-      let statusCode = 500;
-
-      if (error?.code === 11000) {
-        errorMessage = 'The username or email is already in use.';
-        statusCode = 400;
-      }
-
       return {
-        statusCode,
-        message: errorMessage,
-      }
-    }
-  }
-
-  async getAllUsers() {
-    try {
-      const users = await collections.users?.find()?.toArray();
-      return { users };
-    } catch (error: any) {
-      console.error(error);
-      return {
-        error: {
-          message: 'An error occurred while getting the users.',
-          type: error.name
-        }
+        statusCode: 500,
+        message: 'An error occurred while registering the user.',
       }
     }
   }

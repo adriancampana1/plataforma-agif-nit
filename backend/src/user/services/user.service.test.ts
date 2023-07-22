@@ -1,5 +1,5 @@
-import User from "../models/user/user";
-import UserResponse from "../models/user/user.response";
+import User from "../users/models/user/user";
+import UserResponse from "../users/models/user/user.response";
 import { UserService } from "./user.service";
 
 describe("User Service", () => {

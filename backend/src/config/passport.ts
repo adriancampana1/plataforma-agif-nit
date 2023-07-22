@@ -1,6 +1,6 @@
 import passport from "passport";
 import passportJwt from "passport-jwt";
-import { userService } from "../services/user.service";
+import { UserService } from "../user/services/user.service";
 require('dotenv').config();
 
 const JwtStrategy = passportJwt.Strategy;
@@ -14,19 +14,18 @@ const opts = {
 passport.use(
   new JwtStrategy(opts, async (payload, done) => {
     try {
-      
-      const user = userService.getUserByEmail(payload.email);
-        
+
+      const user = UserService.getUserByEmail(payload.email);
+
       if (user) {
         return done(null, user)
       }
-      
+
       return done(null, false)
-      
+
     } catch (error) {
       done(error, false);
     }
   })
-  )
-  
-  
+);
+

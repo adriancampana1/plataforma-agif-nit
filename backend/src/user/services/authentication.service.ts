@@ -1,7 +1,7 @@
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import User from "../models/user/user";
-import UserResponse from "../models/user/user.response";
+import User from "../models/user";
+import UserResponse from "../models/user.response";
 require('dotenv').config();
 
 
