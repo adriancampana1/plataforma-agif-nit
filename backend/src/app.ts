@@ -22,7 +22,7 @@ app.use(passport.initialize());
 app.use("/users", userRoutes);
 
 app.use("/", (req: Request, res: Response, next: NextFunction): void => {
-  res.json({ message: "Allo! Catch-all route." });
+  res.json({ health: true });
 });
 
 export default app;

@@ -2,13 +2,17 @@ import { Request, Response } from 'express';
 import { UserService } from '../../user/services/user.service';
 import { validateRequest } from '../../utils/requireFields';
 import User from '../models/user';
+import AddressService from '../../address/services/address.service';
+import Address from '../../address/models/address';
 
 class UserController {
 
   private userService: UserService;
+  private addressService: AddressService;
 
   constructor(userService: UserService) {
     this.userService = userService;
+    this.addressService = new AddressService();
   }
 
   async getAllUsers(req: Request, res: Response) {
@@ -23,10 +27,18 @@ class UserController {
   async registerUser(req: Request, res: Response) {
     try {
       validateRequest(['username', 'email', 'password'])(req, res, () => { });
-      const user = new User(req.body.username, req.body.email, req.body.password);
+      validateRequest(['zip_code', 'number', 'complement'])(req, res, () => { });
 
-      const response = await this.userService.registerUser(user)
-      res.status(response.statusCode).json(response);
+      const address = new Address(req.body.zip_code, req.body.number, req.body.complement);
+      const addressCreated = await this.addressService.createAddress(address);
+
+      if (addressCreated.statusCode !== 201)
+        return res.status(addressCreated.statusCode).json(addressCreated);
+      
+      const user = new User(req.body.username, req.body.email, req.body.password, addressCreated.data?.insertedId);
+      console.log(user);
+      const userCreated = await this.userService.registerUser(user)
+      return res.status(userCreated.statusCode).json(userCreated);
     } catch (error) {
       res.status(500).json({ message: 'An error occurred while registering the user.' });
     }

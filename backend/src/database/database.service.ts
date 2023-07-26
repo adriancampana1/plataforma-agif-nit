@@ -13,18 +13,26 @@ export async function connectToDataBase() {
   if (!mongoUri) {
     throw new Error('MONGO_URI is not defined in the environment variables');
   }
-  
+
   if (!usersCollectionName) {
     throw new Error('USERS_COLLECTION_NAME is not defined in the environment variables');
   }
-  
+
   if (!addressCollectionName) {
     throw new Error('ADDRESS_COLLECTION_NAME is not defined in the environment variables');
   }
-  
+
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(mongoUri);
   await client.connect();
   const db: mongoDB.Db = client.db(process.env.DB_NAME);
+
+  const usersCollection: mongoDB.Collection = db.collection(usersCollectionName);
+  collections.users = usersCollection;
+  usersCollection.createIndex({ email: 1 }, { unique: true });
+
+  const addressCollection: mongoDB.Collection = db.collection(addressCollectionName);
+  collections.addresses = addressCollection;
+  addressCollection.createIndex({ zip_code: 1 });
 
   await db.command({
     "collMod": usersCollectionName,
@@ -64,43 +72,51 @@ export async function connectToDataBase() {
     }
   });
 
-  // await db.command({
-  //   "collMod": addressCollectionName,
-  //   "validator": {
-  //     $jsonSchema: {
-  //       bsonType: "object",
-  //       required: ["zip_code", "number", "complement", "created_at", "updated_at"],
-  //       additionalProperties: false,
-  //       properties: {
-  //         _id: {},
-  //         zip_code: {
-  //           bsonType: "string",
-  //           description: "must be a string and is required"
-  //         },
-  //         number: {
-  //           bsonType: "int",
-  //           description: "must be an int and is required"
-  //         },
-  //         complement: {
-  //           bsonType: "string",
-  //           description: "must be a string and is required"
-  //         },
-  //         created_at: {
-  //           bsonType: "date",
-  //           description: "must be a date and is required"
-  //         },
-  //         updated_at: {
-  //           bsonType: "date",
-  //           description: "must be a date and is required"
-  //         } 
-  //       }
-  //     }
-  //   }
-  // });
-
-  const usersCollection: mongoDB.Collection = db.collection(usersCollectionName);
-  collections.users = usersCollection;
-  usersCollection.createIndex({ email: 1 }, { unique: true });
+  await db.command({
+    "collMod": addressCollectionName,
+    "validator": {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["zip_code", "number", "complement", "street", "district", "city", "created_at", "updated_at"],
+        additionalProperties: false,
+        properties: {
+          _id: {},
+          zip_code: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          number: {
+            bsonType: "int",
+            description: "must be an int and is required"
+          },
+          complement: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          street: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          district: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          city: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          created_at: {
+            bsonType: "date",
+            description: "must be a date and is required"
+          },
+          updated_at: {
+            bsonType: "date",
+            description: "must be a date and is required"
+          }
+        }
+      }
+    }
+  });
 
   console.log('Connected to database');
 }
