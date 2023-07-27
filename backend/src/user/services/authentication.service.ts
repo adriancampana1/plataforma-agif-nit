@@ -8,7 +8,7 @@ require('dotenv').config();
 class AuthenticationService {
 
   private static refreshTokenLife = '7d';
-  private static accessTokenLife = '1m';
+  private static accessTokenLife = '10m';
 
   static async generateTokens(user: User) {
     const payload = Object.assign({}, UserResponse.fromUser(user));

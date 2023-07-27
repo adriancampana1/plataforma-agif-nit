@@ -3,6 +3,7 @@ import User from "../models/user";
 import UserResponse from "../models/user.response";
 import AuthenticationService from "./authentication.service";
 import { collections } from "../../database/database.service";
+import { DeleteResult } from "mongodb";
 
 class UserService {
 
@@ -25,23 +26,24 @@ class UserService {
 
   async registerUser(user: User): Promise<ServiceResponse<UserResponse>> {
     try {
-      if (await UserService.getUserByEmail(user.email)) {  
+      if (await UserService.getUserByEmail(user.email)) {
         return {
-        statusCode: 400,
-        message: 'Email already in use.'
+          statusCode: 400,
+          message: 'Email already in use.'
         }
       }
-    
+
       user.password = await AuthenticationService.encryptPassword(user)
-      
+
       await user.createUser();
-    
+
       return {
         statusCode: 201,
         message: 'User created successfully.',
         data: UserResponse.fromUser(user)
       }
     } catch (error: any) {
+      console.error(error.errInfo.details);
       return {
         statusCode: 500,
         message: 'An error occurred while registering the user.',
@@ -88,6 +90,22 @@ class UserService {
     }
   }
 
+  async deleteUser(user: User): Promise<ServiceResponse<DeleteResult | undefined>> {
+    try {
+      const deletedUser = await user.deleteUser();
+      return {
+        statusCode: 200,
+        message: 'User deleted successfully.',
+        data: deletedUser
+      }
+    } catch (error: any) {
+      console.error(error);
+      return {
+        statusCode: 500,
+        message: 'An error occurred while deleting the user.',
+      }
+    }
+  }
 
   // Utils functions
   static async getUserByEmail(email: string) {

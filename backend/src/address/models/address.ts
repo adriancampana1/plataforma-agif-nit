@@ -16,7 +16,6 @@ export default class Address {
     try {
       this.created_at = new Date();
       this.updated_at = new Date();
-      console.log(this);
       return await collections.addresses?.insertOne(this);
     } catch (error: any) {
       throw new Error(error);

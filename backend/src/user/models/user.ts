@@ -22,6 +22,14 @@ export default class User {
     }
   }
 
+  async deleteUser() {
+    try {
+      return await collections.users?.deleteOne({ _id: this._id });
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   static async getAllUsers(): Promise<User[]> {
     try {
       return await collections.users?.find()?.toArray() as User[];

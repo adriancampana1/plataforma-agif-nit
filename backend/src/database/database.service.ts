@@ -1,25 +1,26 @@
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
 
-export const collections: { users?: mongoDB.Collection, addresses?: mongoDB.Collection } = {};
+export const collections: {
+  users?: mongoDB.Collection,
+  addresses?: mongoDB.Collection,
+  courses?: mongoDB.Collection
+} = {};
 
 export async function connectToDataBase() {
   dotenv.config();
 
   const mongoUri = process.env.MONGO_URI;
-  const usersCollectionName = process.env.USERS_COLLECTION_NAME;
-  const addressCollectionName = process.env.ADDRESS_COLLECTION_NAME;
+  const usersCollectionName = 'users';
+  const addressCollectionName = 'addresses';
+  const coursesCollectionName = 'courses';
 
   if (!mongoUri) {
     throw new Error('MONGO_URI is not defined in the environment variables');
   }
 
-  if (!usersCollectionName) {
-    throw new Error('USERS_COLLECTION_NAME is not defined in the environment variables');
-  }
-
-  if (!addressCollectionName) {
-    throw new Error('ADDRESS_COLLECTION_NAME is not defined in the environment variables');
+  if (!process.env.DB_NAME) {
+    throw new Error('DB_NAME is not defined in the environment variables');
   }
 
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(mongoUri);
@@ -34,6 +35,11 @@ export async function connectToDataBase() {
   collections.addresses = addressCollection;
   addressCollection.createIndex({ zip_code: 1 });
 
+  const coursesCollection: mongoDB.Collection = db.collection(coursesCollectionName);
+  collections.courses = coursesCollection;
+  coursesCollection.createIndex({ title: 1 });
+
+  console.log('create validator for users collection');
   await db.command({
     "collMod": usersCollectionName,
     "validator": {
@@ -43,6 +49,10 @@ export async function connectToDataBase() {
         additionalProperties: false,
         properties: {
           _id: {},
+          address_id: {
+            bsonType: "objectId",
+            description: "must be a objectId and is required"
+          },
           role: {
             bsonType: "string",
             description: "must be a string and is required"
@@ -72,6 +82,7 @@ export async function connectToDataBase() {
     }
   });
 
+  console.log('create validator for address collection');
   await db.command({
     "collMod": addressCollectionName,
     "validator": {
@@ -86,8 +97,8 @@ export async function connectToDataBase() {
             description: "must be a string and is required"
           },
           number: {
-            bsonType: "int",
-            description: "must be an int and is required"
+            bsonType: "number",
+            description: "must be an number and is required"
           },
           complement: {
             bsonType: "string",
@@ -104,6 +115,45 @@ export async function connectToDataBase() {
           city: {
             bsonType: "string",
             description: "must be a string and is required"
+          },
+          created_at: {
+            bsonType: "date",
+            description: "must be a date and is required"
+          },
+          updated_at: {
+            bsonType: "date",
+            description: "must be a date and is required"
+          }
+        }
+      }
+    }
+  });
+
+  console.log('create validator for courses collection');
+  await db.command({
+    "collMod": coursesCollectionName,
+    "validator": {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["title, description, tags, progress, created_at, updated_at"],
+        additionalProperties: false,
+        properties: {
+          _id: {},
+          title: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          description: {
+            bsonType: "string",
+            description: "must be a string and is required"
+          },
+          tags: {
+            bsonType: "array",
+            description: "must be a array and is required"
+          },
+          progress: {
+            bsonType: "number",
+            description: "must be a number and is required"
           },
           created_at: {
             bsonType: "date",

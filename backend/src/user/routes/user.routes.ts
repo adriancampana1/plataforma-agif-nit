@@ -11,4 +11,6 @@ router.get("/", passport.authenticate("jwt", { session: false }), userController
 router.post("/register", userController.registerUser.bind(userController));
 router.post("/login", userController.loginUser.bind(userController));
 
+router.delete("/account", passport.authenticate("jwt", { session: false }), userController.deleteAccount.bind(userController));
+
 export { router };

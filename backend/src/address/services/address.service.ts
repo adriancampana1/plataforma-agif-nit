@@ -1,8 +1,9 @@
-import { InsertOneResult } from "mongodb";
+import { DeleteResult, InsertOneResult, ObjectId } from "mongodb";
 import { ServiceResponse } from "../../utils/types/service.response";
 import Address from "../models/address";
 import axios from "axios";
 import { ViaCepResponse } from "../types/responses";
+import { collections } from "../../database/database.service";
 
 export default class AddressService {
 
@@ -17,23 +18,23 @@ export default class AddressService {
           statusCode: 400,
           message: 'The zip code must have 8 digits.',
         }
-        
+
       if (isNaN(address.number))
         return {
           statusCode: 400,
           message: 'The number field must be a number.',
         }
-        
+
       address.number = Number(address.number)
-      
+
       const addressExists = await this.searchAddress(address);
-      
+
       if (!addressExists)
         return {
           statusCode: 400,
           message: 'Invalid zip code.',
         }
-      
+
       address.street = addressExists.logradouro;
       address.district = addressExists.bairro;
       address.city = addressExists.localidade;
@@ -64,5 +65,22 @@ export default class AddressService {
     }
   }
 
+  // utils
+  static async deleteAddressById(address_id: ObjectId): Promise<ServiceResponse<DeleteResult | undefined>> {
+    try {
+      return {
+        statusCode: 200,
+        message: 'Address deleted successfully.',
+        data: await collections.addresses?.deleteOne({ _id: address_id }),
+      }
+    } catch (error: any) {
+      console.log(error);
+      return {
+        statusCode: 500,
+        message: 'An error occurred while deleting the address.',
+      }
+    }
+  }
 }
+
 
