@@ -1,12 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { collections } from '../../database/database.service';
 
+// role: 'student' | 'teacher' | 'admin'
+
 export default class User {
   constructor(
     public username: string,
     public email: string,
     public password: string,
     public address_id?: ObjectId,
+    public role: string = 'student',
     public created_at?: Date,
     public updated_at?: Date,
     public _id?: ObjectId

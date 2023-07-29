@@ -1,4 +1,4 @@
-import User from "../users/models/user/user";
+import User from "../models/user"
 import AuthenticationService from "./authentication.service";
 
 describe('AuthenticationService', () => {

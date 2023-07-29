@@ -1,10 +1,24 @@
 import { Request, Response } from 'express';
 import { UserService } from '../../user/services/user.service';
-import { validateRequest } from '../../utils/requireFields';
 import User from '../models/user';
 import AddressService from '../../address/services/address.service';
 import Address from '../../address/models/address';
 import { ObjectId } from 'mongodb';
+import Joi from 'joi';
+
+const registerUserSchema = Joi.object({
+  username: Joi.string().required().min(3).max(50),
+  email: Joi.string().required().email(),
+  password: Joi.string().required().min(6).max(50),
+  zip_code: Joi.string().required().min(8).max(30),
+  number: Joi.string().required().min(1).max(10),
+  complement: Joi.string().optional().allow(''),
+});
+
+const loginUserSchema = Joi.object({
+  email: Joi.string().required().email(),
+  password: Joi.string().required().min(6).max(50),
+});
 
 class UserController {
 
@@ -27,8 +41,8 @@ class UserController {
 
   async registerUser(req: Request, res: Response) {
     try {
-      validateRequest(['username', 'email', 'password'])(req, res, () => { });
-      validateRequest(['zip_code', 'number', 'complement'])(req, res, () => { });
+      const { error } = registerUserSchema.validate(req.body);
+      if (error) return res.status(400).json({ message: error.message });
 
       const address = new Address(req.body.zip_code, req.body.number, req.body.complement);
       const addressCreated = await this.addressService.createAddress(address);
@@ -46,20 +60,27 @@ class UserController {
   }
 
   async loginUser(req: Request, res: Response) {
-    validateRequest(['email', 'password'])(req, res, () => { });
-    const { email, password } = req.body;
-    const loggedIn = await this.userService.loginUser(email, password);
-    res.status(loggedIn.statusCode).json(loggedIn);
+    try {
+      const { error } = loginUserSchema.validate(req.body);
+      if (error) return res.status(400).json({ message: error.message });
+
+      const { email, password } = req.body;
+      const loggedIn = await this.userService.loginUser(email, password);
+      res.status(loggedIn.statusCode).json(loggedIn);
+    } catch (error) {
+      res.status(500).json({ message: 'An error occurred while logging in the user.' });
+    }
   }
 
   async deleteAccount(req: Request, res: Response) {
     try {
-      const { username, email, password, address_id, created_at, updated_at, _id } = req.user as User;
+      const { username, email, password, address_id, role, created_at, updated_at, _id } = req.user as User;
       const user = new User(
         username,
         email,
         password,
         address_id,
+        role,
         created_at,
         updated_at,
         _id
@@ -76,8 +97,6 @@ class UserController {
       res.status(500).json({ message: 'An error occurred while deleting the user.' });
     }
   }
-
-
 }
 
 export { UserController };

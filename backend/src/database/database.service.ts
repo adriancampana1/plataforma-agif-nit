@@ -135,7 +135,7 @@ export async function connectToDataBase() {
     "validator": {
       $jsonSchema: {
         bsonType: "object",
-        required: ["title, description, tags, progress, created_at, updated_at"],
+        required: ["title", "description", "tags", "progress", "created_at", "updated_at"],
         additionalProperties: false,
         properties: {
           _id: {},
@@ -149,7 +149,7 @@ export async function connectToDataBase() {
           },
           tags: {
             bsonType: "array",
-            description: "must be a array and is required"
+            description: "must be an array and is required"
           },
           progress: {
             bsonType: "number",

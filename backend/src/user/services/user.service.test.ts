@@ -1,5 +1,5 @@
-import User from "../users/models/user/user";
-import UserResponse from "../users/models/user/user.response";
+import User from "../models/user";
+import UserResponse from "../models/user.response";
 import { UserService } from "./user.service";
 
 describe("User Service", () => {
@@ -20,7 +20,7 @@ describe("User Service", () => {
         data: UserResponse.fromUser(user)
       };
 
-      jest.mock('./database.service', () => ({
+      jest.mock('../../database/database.service', () => ({
         collections: {
           users: {
             insertOne: jest.fn()
@@ -29,8 +29,7 @@ describe("User Service", () => {
       }));
 
       const userService = new UserService();
-      const response = await userService.createUser(user);
-      console.log('jest', response);
+      const response = await userService.registerUser(user)
 
       expect(response).toEqual(expectedResponse);
     });

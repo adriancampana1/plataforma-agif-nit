@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import { router as userRoutes } from "./user/routes/user.routes";
+import { router as courseRoutes } from "./courses/routes/course.routes";
 import dotenv from "dotenv";
 import fs from "fs";
 import passport from "passport";
@@ -20,6 +21,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/users", userRoutes);
+app.use("/courses", courseRoutes);
 
 app.use("/", (req: Request, res: Response, next: NextFunction): void => {
   res.json({ health: true });
