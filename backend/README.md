@@ -32,6 +32,30 @@
 $ npm install
 ```
 
+## Database setup
+
+  - Create .env file in the root directory 
+  - Add the following variables to the .env file
+
+```bash
+  DATABASE_URL="postgresql://root:root@localhost:5432/pic?schema=public"
+  DB_USER=root
+  DB_PASSWORD=root
+  DB_ADMIN_EMAIL=admin@root.com
+  DB_ADMIN_PASSWORD=root
+```
+
+## Running database
+
+- This compose file will create a postgres database and pgadmin4 to manage the database
+- the pgadmin4 will be available at http://localhost:8081
+- the database will be available at http://localhost:5432
+- the credentials for the database are in the .env file
+
+```bash
+  docker-compose up
+```
+
 ## Running the app
 
 ```bash
@@ -57,16 +81,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
