@@ -1,5 +1,6 @@
 import {
   BadGatewayException,
+  BadRequestException,
   CallHandler,
   ConflictException,
   ExecutionContext,
@@ -19,7 +20,7 @@ export class ErrorsInterceptor implements NestInterceptor {
         const parameters = Object.keys(err);
 
         console.log('------ ERROR ---');
-        console.log('code', code);
+        console.log('code', err);
         for (const parameter of parameters) {
           console.log(parameter, err[parameter]);
         }
@@ -28,7 +29,10 @@ export class ErrorsInterceptor implements NestInterceptor {
           throw new NotFoundException('This record does not exist.');
 
         if (err.response?.message) {
-          throw err;
+          const message = Array.isArray(err.response.message)
+            ? err.response.message[0]
+            : err.response.message;
+          throw new BadRequestException(message);
         }
 
         switch (code) {

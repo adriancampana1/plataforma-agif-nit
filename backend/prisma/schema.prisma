@@ -12,6 +12,8 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+  address   Address  @relation(fields: [addressId], references: [id])
+  addressId Int      @map("address_id")
   role      Int      @default(0)
   username  String
   email     String   @unique
@@ -20,4 +22,14 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Address {
+  id         Int    @id @default(autoincrement())
+  zip        String
+  number     Int
+  complement String
+  User       User[]
+
+  @@map("addresses")
 }

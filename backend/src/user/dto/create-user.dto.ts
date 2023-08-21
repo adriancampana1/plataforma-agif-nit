@@ -1,7 +1,14 @@
-import { Prisma } from '@prisma/client';
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { CreateAddressDto } from 'src/address/dto/create-address.dto';
 
-export class CreateUserDto implements Prisma.UserCreateInput {
+export class CreateUserDto {
   @IsOptional()
   @IsNumber()
   role?: number;
@@ -17,4 +24,8 @@ export class CreateUserDto implements Prisma.UserCreateInput {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @ValidateNested()
+  @Type(() => CreateAddressDto)
+  address: CreateAddressDto;
 }

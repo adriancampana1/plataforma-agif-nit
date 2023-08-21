@@ -1,19 +1,23 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { AddressService } from 'src/address/address.service';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './repository/user.repository';
+import { ReturnUserDto } from './dto/return-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.userRepository.create(createUserDto);
+    const createdUser = await this.userRepository.create(createUserDto);
+    return new ReturnUserDto(createdUser);
   }
 
   async findAll() {
-    return await this.userRepository.findAll();
+    const users = await this.userRepository.findAll();
+    return users.map((user) => new ReturnUserDto(user));
   }
 
   async findOne(id: number) {
