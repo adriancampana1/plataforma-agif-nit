@@ -11,15 +11,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  address   Address  @relation(fields: [addressId], references: [id])
-  addressId String   @map("address_id")
-  role      Role     @default(Student)
-  username  String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String            @id @default(uuid())
+  address         Address           @relation(fields: [addressId], references: [id])
+  addressId       String            @map("address_id")
+  role            Role              @default(Student)
+  username        String
+  email           String            @unique
+  password        String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  CourseProfessor CourseProfessor[]
 
   @@map("users")
 }
@@ -37,4 +38,28 @@ model Address {
 enum Role {
   Student
   Professor
+  Admin
+}
+
+model Course {
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  tags            String[]
+  classesCount    Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  CourseProfessor CourseProfessor[]
+
+  @@map("courses")
+}
+
+model CourseProfessor {
+  id          String @id @default(uuid())
+  course      Course @relation(fields: [courseId], references: [id])
+  courseId    String @map("course_id")
+  professor   User   @relation(fields: [professorId], references: [id])
+  professorId String @map("professor_id")
+
+  @@map("courses_to_professors")
 }
