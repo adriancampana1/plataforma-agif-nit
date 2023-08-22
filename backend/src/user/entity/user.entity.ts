@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 
 export class UserEntity implements Prisma.UserUncheckedCreateInput {
-  id?: number;
-  addressId: number;
-  role?: number;
+  id?: string;
+  addressId: string;
+  role?: $Enums.Role;
   username: string;
   email: string;
   password: string;

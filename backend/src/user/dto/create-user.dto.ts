@@ -1,3 +1,4 @@
+import { $Enums, Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsEmail,
@@ -10,10 +11,10 @@ import {
 } from 'class-validator';
 import { CreateAddressDto } from 'src/address/dto/create-address.dto';
 
-export class CreateUserDto {
+export class CreateUserDto implements Prisma.UserCreateWithoutAddressInput {
   @IsOptional()
   @IsNumber()
-  role?: number;
+  role?: $Enums.Role;
 
   @IsString()
   @IsNotEmpty()

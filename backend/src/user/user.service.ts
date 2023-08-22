@@ -17,7 +17,7 @@ export class UserService {
     return await this.userRepository.findAll();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.userRepository.findOne(id);
   }
 
@@ -25,11 +25,11 @@ export class UserService {
     return await this.userRepository.findOneByEmail(email);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userRepository.update(id, updateUserDto);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.userRepository.remove(id);
   }
 }

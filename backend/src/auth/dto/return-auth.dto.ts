@@ -1,10 +1,11 @@
+import { $Enums } from '@prisma/client';
 import { AuthEntity } from '../entity/auth.entity';
 
 export class ReturnAuthDto {
-  role?: number;
+  role?: $Enums.Role;
   username: string;
   email: string;
-  addressId?: number;
+  addressId?: string;
   access_token?: string;
 
   constructor(authEntity: AuthEntity) {

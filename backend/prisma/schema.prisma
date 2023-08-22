@@ -11,10 +11,10 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   address   Address  @relation(fields: [addressId], references: [id])
-  addressId Int      @map("address_id")
-  role      Int      @default(0)
+  addressId String   @map("address_id")
+  role      Role     @default(Student)
   username  String
   email     String   @unique
   password  String
@@ -25,11 +25,16 @@ model User {
 }
 
 model Address {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   zip        String
   number     Int
   complement String
   User       User[]
 
   @@map("addresses")
+}
+
+enum Role {
+  Student
+  Professor
 }
