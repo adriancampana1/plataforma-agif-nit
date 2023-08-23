@@ -26,11 +26,12 @@ model User {
 }
 
 model Address {
-  id         String @id @default(uuid())
+  id         String     @id @default(uuid())
   zip        String
   number     Int
   complement String
   User       User[]
+  Partners   Partner[]
 
   @@map("addresses")
 }
@@ -62,4 +63,19 @@ model CourseProfessor {
   professorId String @map("professor_id")
 
   @@map("courses_to_professors")
+}
+
+model Partner {
+  id              String   @id @default(uuid())
+  address         Address  @relation(fields: [addressId], references: [id])
+  addressId       String   @map("address_id")
+  corporate_name  String
+  commercial_name String
+  cnpj            String
+  representative  String
+  signature       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("partners")
 }
