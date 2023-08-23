@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 
@@ -20,7 +21,7 @@ export class CourseRepository {
   async findOneById(id: string) {
     return await this.prisma.course.findUnique({
       where: { id },
-      include: { CourseProfessor: true },
+      include: { CourseProfessor: true, Modules: true },
     });
   }
 

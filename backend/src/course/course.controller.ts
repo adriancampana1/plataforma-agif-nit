@@ -27,6 +27,17 @@ export class CourseController {
     );
   }
 
+  @Post('professor/:id')
+  async addProfessor(
+    @Param('id') id: string,
+    @Body() createProfessorDto: CreateProfessorDto,
+  ) {
+    if (!id) {
+      throw new BadRequestException('courseId is required');
+    }
+    return await this.courseService.addProfessor(id, createProfessorDto);
+  }
+
   @Get()
   async findAll(): Promise<ReturnCourseDto[]> {
     const courses = await this.courseService.findAll();
@@ -65,22 +76,13 @@ export class CourseController {
     );
   }
 
-  @Post(':id')
-  async addProfessor(
-    @Param('id') id: string,
-    @Body() createProfessorDto: CreateProfessorDto,
-  ) {
-    if (!id) {
-      throw new BadRequestException('courseId is required');
-    }
-    return await this.courseService.addProfessor(id, createProfessorDto);
-  }
-
-  @Delete(':id')
+  @Delete('professor/:id')
   async removeProfessor(
     @Param('id') courseId: string,
     @Body() removeProfessorDto: RemoveProfessorDto,
   ) {
+    console.log(courseId);
+
     if (!courseId) {
       throw new BadRequestException('courseId is required');
     }
