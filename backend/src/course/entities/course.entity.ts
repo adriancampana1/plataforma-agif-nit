@@ -9,4 +9,5 @@ export class CourseEntity implements Prisma.CourseUncheckedCreateInput {
   createdAt?: string | Date;
   updatedAt?: string | Date;
   CourseProfessor?: Prisma.CourseProfessorUncheckedCreateNestedManyWithoutCourseInput;
+  Modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput;
 }
