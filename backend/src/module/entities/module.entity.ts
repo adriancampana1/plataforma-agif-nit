@@ -6,4 +6,5 @@ export class ModuleEntity implements Prisma.ModuleUncheckedCreateInput {
   description: string;
   number: number;
   courseId: string;
+  Classes?: Prisma.ClassUncheckedCreateNestedManyWithoutModuleInput;
 }

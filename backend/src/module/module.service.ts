@@ -4,6 +4,7 @@ import { CourseService } from 'src/course/course.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { ModuleRepository } from './repository/module.repository';
+import { ModuleEntity } from './entities/module.entity';
 
 @Injectable()
 export class ModuleService {
@@ -13,12 +14,18 @@ export class ModuleService {
   ) {}
 
   async create(createModuleDto: CreateModuleDto) {
-    createModuleDto.number = await this.moduleRepository.newModuleNumber();
+    createModuleDto.number = await this.moduleRepository.newModuleNumber(
+      createModuleDto.courseId,
+    );
     return await this.moduleRepository.create(createModuleDto);
   }
 
   async findAll() {
     return await this.moduleRepository.getAll();
+  }
+
+  async findOneById(id: string) {
+    return (await this.moduleRepository.findOneById(id)) as ModuleEntity;
   }
 
   async findByCourseID(id: string) {
