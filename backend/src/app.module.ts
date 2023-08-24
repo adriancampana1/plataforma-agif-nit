@@ -6,6 +6,7 @@ import { CourseModule } from './course/course.module';
 import { ModuleModule } from './module/module.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
+import { ClassModule } from './class/class.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     CourseModule,
     ModuleModule,
+    ClassModule,
   ],
   controllers: [],
   providers: [],

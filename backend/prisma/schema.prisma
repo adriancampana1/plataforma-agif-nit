@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id              String            @id @default(uuid())
-  address         Address           @relation(fields: [addressId], references: [id])
+  address         Address           @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId       String            @map("address_id")
   role            Role              @default(Student)
   username        String
@@ -66,12 +66,33 @@ model CourseProfessor {
 }
 
 model Module {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String
   number      Int
-  Course      Course @relation(fields: [courseId], references: [id])
-  courseId    String @map("course_id")
+  Course      Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId    String  @map("course_id")
+  Classes     Class[]
 
   @@map("modules")
+}
+
+model Class {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  type        ClassType
+  content     String
+  number      Int
+  Module      Module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId    String    @map("module_id")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("classes")
+}
+
+enum ClassType {
+  Video
+  Markdown
 }

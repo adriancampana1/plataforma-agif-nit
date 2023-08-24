@@ -21,7 +21,14 @@ export class CourseRepository {
   async findOneById(id: string) {
     return await this.prisma.course.findUnique({
       where: { id },
-      include: { CourseProfessor: true, Modules: true },
+      include: {
+        CourseProfessor: true,
+        Modules: {
+          orderBy: {
+            number: 'asc',
+          },
+        },
+      },
     });
   }
 

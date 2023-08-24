@@ -55,7 +55,7 @@ export class CourseController {
     };
   }
 
-  @Get(':search')
+  @Get('search/:search')
   async findBySearch(
     @Param('search') search: string,
   ): Promise<ReturnCourseDto[]> {

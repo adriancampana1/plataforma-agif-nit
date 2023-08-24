@@ -1,16 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { ModuleService } from './module.service';
+
 import { CreateModuleDto } from './dto/create-module.dto';
-import { UpdateModuleDto } from './dto/update-module.dto';
 import { ReturnModuleDto } from './dto/return-module.dto';
+import { UpdateModuleDto } from './dto/update-module.dto';
+import { ModuleService } from './module.service';
 
 @Controller('module')
 export class ModuleController {
@@ -24,6 +25,11 @@ export class ModuleController {
   }
 
   @Get(':id')
+  async findOneById(@Param('id') id: string) {
+    return new ReturnModuleDto(await this.moduleService.findOneById(id));
+  }
+
+  @Get('course/:id')
   async findOne(@Param('id') courseId: string) {
     const modules = await this.moduleService.findByCourseID(courseId);
     return modules.map((module) => new ReturnModuleDto(module));
