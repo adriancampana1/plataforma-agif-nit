@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   private async getTokens(user: UserEntity) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { role: user.role, email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: this.jwtService.sign(payload, {

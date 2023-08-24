@@ -1,11 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
+import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ReturnAuthDto } from './dto/return-auth.dto';
 import { RefreshJwtGuard } from './guards/refresh.guard';
-import { Public } from './public.decorator';
 
 @Public()
 @Controller('auth')
