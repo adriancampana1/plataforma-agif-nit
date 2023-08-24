@@ -29,7 +29,7 @@ export class CourseService {
 
     const professors = [];
     for (const professor of course.CourseProfessor) {
-      const user = await this.userService.findOne(professor.professorId);
+      const user = await this.userService.findOneById(professor.professorId);
       professors.push(user);
     }
 

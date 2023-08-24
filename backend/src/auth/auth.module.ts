@@ -7,7 +7,8 @@ import { jwtConstants } from './jwt/constants';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshJwtStrategy } from './jwt/refresh.strategy';
 
 @Module({
   imports: [
@@ -15,12 +16,13 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: jwtConstants.accessExpiresIn },
     }),
   ],
   providers: [
     AuthService,
     JwtStrategy,
+    RefreshJwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
