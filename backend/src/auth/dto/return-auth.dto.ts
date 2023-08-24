@@ -1,18 +1,17 @@
-import { $Enums } from '@prisma/client';
+import { ReturnUserDto } from 'src/user/dto/return-user.dto';
+
 import { AuthEntity } from '../entity/auth.entity';
 
 export class ReturnAuthDto {
-  role?: $Enums.Role;
-  username: string;
-  email: string;
-  addressId?: string;
+  user: ReturnUserDto;
   access_token?: string;
+  refresh_token?: string;
 
   constructor(authEntity: AuthEntity) {
-    this.role = authEntity.role;
-    this.username = authEntity.username;
-    this.email = authEntity.email;
-    this.addressId = authEntity.addressId;
+    this.user = authEntity.user
+      ? new ReturnUserDto(authEntity.user)
+      : undefined;
     this.access_token = authEntity.access_token;
+    this.refresh_token = authEntity.refresh_token;
   }
 }
