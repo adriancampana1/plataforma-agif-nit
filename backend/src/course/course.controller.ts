@@ -7,20 +7,23 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { ReturnCourseDto } from './dto/return-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { RemoveProfessorDto } from './dto/remove-professor.dto';
+import { ReturnCourseDto } from './dto/return-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Post()
+  @UseGuards(new RoleGuard(['Professor']))
   async create(@Body() createCourseDto: CreateCourseDto) {
     return new ReturnCourseDto(
       await this.courseService.create(createCourseDto),
@@ -28,6 +31,7 @@ export class CourseController {
   }
 
   @Post('professor/:id')
+  @UseGuards(new RoleGuard(['Professor']))
   async addProfessor(
     @Param('id') id: string,
     @Body() createProfessorDto: CreateProfessorDto,
@@ -64,6 +68,7 @@ export class CourseController {
   }
 
   @Patch(':id')
+  @UseGuards(new RoleGuard(['Professor']))
   async update(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,
@@ -77,6 +82,7 @@ export class CourseController {
   }
 
   @Delete('professor/:id')
+  @UseGuards(new RoleGuard(['Professor']))
   async removeProfessor(
     @Param('id') courseId: string,
     @Body() removeProfessorDto: RemoveProfessorDto,
@@ -94,6 +100,7 @@ export class CourseController {
   }
 
   @Delete(':id')
+  @UseGuards(new RoleGuard(['Professor']))
   async remove(@Param('id') id: string) {
     return new ReturnCourseDto(await this.courseService.remove(id));
   }

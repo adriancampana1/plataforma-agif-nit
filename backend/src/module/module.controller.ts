@@ -6,7 +6,9 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 
 import { CreateModuleDto } from './dto/create-module.dto';
 import { ReturnModuleDto } from './dto/return-module.dto';
@@ -18,6 +20,7 @@ export class ModuleController {
   constructor(private readonly moduleService: ModuleService) {}
 
   @Post()
+  @UseGuards(new RoleGuard(['Professor']))
   async create(@Body() createModuleDto: CreateModuleDto) {
     return new ReturnModuleDto(
       await this.moduleService.create(createModuleDto),
@@ -36,6 +39,7 @@ export class ModuleController {
   }
 
   @Patch(':id')
+  @UseGuards(new RoleGuard(['Professor']))
   async update(
     @Param('id') id: string,
     @Body() updateModuleDto: UpdateModuleDto,
@@ -46,6 +50,7 @@ export class ModuleController {
   }
 
   @Delete(':id')
+  @UseGuards(new RoleGuard(['Professor']))
   remove(@Param('id') id: string) {
     return this.moduleService.remove(id);
   }

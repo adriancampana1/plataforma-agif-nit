@@ -1,10 +1,20 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 
 @Controller('class')
+@UseGuards(new RoleGuard(['Professor']))
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
 
