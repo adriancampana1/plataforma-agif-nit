@@ -25,23 +25,41 @@ export class PartnerController {
     );
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.partnerService.findAll();
-  // }
+  @Get()
+  async findAll(): Promise<ReturnPartnerDto[]> {
+    const partners = await this.partnerService.findAll();
+    return partners.map((partner) => new ReturnPartnerDto(partner));
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.partnerService.findOne(+id);
-  // }
+  @Get(':id')
+  async findOneById(@Param('id') id: string) {
+    return new ReturnPartnerDto (await this.partnerService.findOneById(id));
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePartnerDto: UpdatePartnerDto) {
-  //   return this.partnerService.update(+id, updatePartnerDto);
-  // }
+  @Get('search/:search')
+  async findBySearch(
+    @Param('search') search: string,
+  ): Promise<ReturnPartnerDto[]> {
+    console.log(search);
+    const partners = await this.partnerService.findBySearch(search);
+    return partners.map((partner) => new ReturnPartnerDto(partner));
+  }
+  
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updatePartnerDto: UpdatePartnerDto,
+  ) {
+    if (!id) {
+      throw new BadRequestException('partnerId is required');
+    }
+    return new ReturnPartnerDto(
+      await this.partnerService.update(id, updatePartnerDto),
+    );
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.partnerService.remove(+id);
-  // }
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return new ReturnPartnerDto(await this.partnerService.remove(id));
+  }
 }

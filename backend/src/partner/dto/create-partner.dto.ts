@@ -29,7 +29,7 @@ export class CreatePartnerDto implements Prisma.PartnerCreateWithoutAddressInput
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(3)    
+    @MinLength(14)    
     cnpj: string;
 
     @IsString()

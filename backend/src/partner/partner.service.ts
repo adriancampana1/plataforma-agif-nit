@@ -2,33 +2,43 @@ import { Injectable } from '@nestjs/common';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { PartnerRepository } from './repository/partner.repository';
+import { PartnerEntity } from './entities/partner.entity';
 
 
 @Injectable()
 export class PartnerService {
   constructor(private readonly partnerRepository: PartnerRepository) {}
-  
+
   async create(createPartnerDto: CreatePartnerDto) {
     return await this.partnerRepository.create(createPartnerDto);
   }
-  
-  // create(createPartnerDto: CreatePartnerDto) {
-  //   return 'This action adds a new partner';
-  // }
 
-  // findAll() {
-  //   return `This action returns all partner`;
-  // }
+  async findAll(): Promise<PartnerEntity[]> {
+    return await this.partnerRepository.findAll();
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} partner`;
-  // }
+  async findOneById(id: string) {
+    return await this.partnerRepository.findOne(id);
+  }
 
-  // update(id: number, updatePartnerDto: UpdatePartnerDto) {
-  //   return `This action updates a #${id} partner`;
-  // }
+  async findOneByCorporateName(corporate_name: string): Promise<PartnerEntity[]> {
+    return await this.partnerRepository.findOneByCorporateName(corporate_name);
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} partner`;
-  // }
+  async findOneByCommercialName(commercial_name: string): Promise<PartnerEntity[]> {
+    return await this.partnerRepository.findOneByCommercialName(commercial_name);
+  }
+
+  async findBySearch(search: string): Promise<PartnerEntity[]> {
+    return await this.partnerRepository.findBySearch(search);
+  }
+
+  async update(id: string, updatePartnerDto: UpdatePartnerDto) {
+    return await this.partnerRepository.update(id, updatePartnerDto);
+  }
+
+  async remove(id: string) {
+    return await this.partnerRepository.remove(id);
+  }
+
 }
