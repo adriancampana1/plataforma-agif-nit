@@ -1,10 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
+import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ReturnAuthDto } from './dto/return-auth.dto';
-import { Public } from './public.decorator';
+import { RefreshJwtGuard } from './guards/refresh.guard';
 
 @Public()
 @Controller('auth')
@@ -19,5 +20,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto): Promise<ReturnAuthDto> {
     return new ReturnAuthDto(await this.authService.login(loginDto));
+  }
+
+  @UseGuards(RefreshJwtGuard)
+  @Post('refresh')
+  async refresh(
+    @Body('refresh_token') refresh_token: string,
+  ): Promise<ReturnAuthDto> {
+    return new ReturnAuthDto(await this.authService.refresh(refresh_token));
   }
 }

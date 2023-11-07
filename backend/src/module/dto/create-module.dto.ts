@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export class CreateCourseDto {
+export class CreateModuleDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
@@ -10,7 +10,9 @@ export class CreateCourseDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString({ each: true })
+  number: number;
+
+  @IsString()
   @IsNotEmpty()
-  tags?: string[];
+  courseId: string;
 }
